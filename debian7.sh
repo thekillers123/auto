@@ -74,13 +74,6 @@ apt-file update
 vnstat -u -i venet0
 service vnstat restart
 
-# install screenfetch
-cd
-wget 'https://raw.githubusercontent.com/thekillers123/auto/master/null/screenfetch-dev'
-mv screenfetch-dev /usr/bin/screenfetch-dev
-chmod +x /usr/bin/screenfetch-dev
-echo "clear" >> .profile
-echo "screenfetch-dev" >> .profile
 
 # install webserver
 cd
@@ -96,42 +89,33 @@ service php5-fpm restart
 service nginx restart
 
 # install openvpn
-#wget -O /etc/openvpn/openvpn.tar "https://github.com/ForNesiaFreak/FNS/raw/master/sett/openvpn-debian.tar"
-#cd /etc/openvpn/
-#tar xf openvpn.tar
-#wget -O /etc/openvpn/1194.conf "https://raw.githubusercontent.com/thekillers123/auto/master/null/1194.conf"
-#service openvpn restart
-#sysctl -w net.ipv4.ip_forward=1
-#sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
-#wget -O /etc/iptables.up.rules "https://raw.githubusercontent.com/thekillers123/auto/master/null/iptables.up.rules"
-#sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.local
-#sed -i $MYIP2 /etc/iptables.up.rules;
-#iptables-restore < /etc/iptables.up.rules
-#service openvpn restart
+wget -O /etc/openvpn/openvpn.tar "https://github.com/ForNesiaFreak/FNS/raw/master/sett/openvpn-debian.tar"
+cd /etc/openvpn/
+tar xf openvpn.tar
+wget -O /etc/openvpn/1194.conf "https://raw.githubusercontent.com/thekillers123/auto/master/null/1194.conf"
+service openvpn restart
+sysctl -w net.ipv4.ip_forward=1
+sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
+wget -O /etc/iptables.up.rules "https://raw.githubusercontent.com/thekillers123/auto/master/null/iptables.up.rules"
+sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.local
+sed -i $MYIP2 /etc/iptables.up.rules;
+iptables-restore < /etc/iptables.up.rules
+service openvpn restart
 
 # configure openvpn client config
-#cd /etc/openvpn/
-#wget -O /etc/openvpn/1194-client.ovpn "https://raw.githubusercontent.com/thekillers123/auto/master/null/1194-client.conf"
-#sed -i $MYIP2 /etc/openvpn/1194-client.ovpn;
+cd /etc/openvpn/
+wget -O /etc/openvpn/1194-client.ovpn "https://raw.githubusercontent.com/thekillers123/auto/master/null/1194-client.conf"
+sed -i $MYIP2 /etc/openvpn/1194-client.ovpn;
 PASS=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`;
 useradd -M -s /bin/false johnker
 echo "fornesia:$PASS" | chpasswd
-#echo "username" >> pass.txt
-#echo "password" >> pass.txt
-#tar cf client.tar 1194-client.ovpn pass.txt
-#cp client.tar /home/vps/public_html/
-#cp 1194-client.ovpn client.ovpn
-#cp client.ovpn /home/vps/public_html/
+echo "username" >> pass.txt
+echo "password" >> pass.txt
+tar cf client.tar 1194-client.ovpn pass.txt
+cp client.tar /home/vps/public_html/
+cp 1194-client.ovpn client.ovpn
+cp client.ovpn /home/vps/public_html/
 cd
-
-# install badvpn
-wget -O /usr/bin/badvpn-udpgw "https://github.com/ForNesiaFreak/FNS/raw/master/sett/badvpn-udpgw"
-if [ "$OS" == "x86_64" ]; then
-  wget -O /usr/bin/badvpn-udpgw "https://github.com/ForNesiaFreak/FNS/raw/master/sett/badvpn-udpgw64"
-fi
-sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
-chmod +x /usr/bin/badvpn-udpgw
-screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
 
 
 # install mrtg
@@ -228,7 +212,7 @@ wget -O user-login.sh "https://raw.githubusercontent.com/ForNesiaFreak/FNS_Debia
 wget -O user-expired.sh "https://raw.githubusercontent.com/ForNesiaFreak/FNS_Debian7/fornesia.com/freak/user-expired.sh"
 #wget -O userlimit.sh "https://raw.githubusercontent.com/suryadewa/fornesiavps/fns/limit.sh"
 wget -O user-list.sh "https://raw.githubusercontent.com/ForNesiaFreak/FNS_Debian7/fornesia.com/freak/user-list.sh"
-wget -O /etc/issue.net "https://raw.githubusercontent.com/ForNesiaFreak/FNS_Debian7/fornesia.com/null/banner"
+wget -O /etc/issue.net "https://raw.githubusercontent.com/thekillers123/auto/master/null/banner"
 echo "0 0 * * * root /root/user-expired.sh" > /etc/cron.d/user-expired
 #echo "@reboot root /root/userlimit.sh" > /etc/cron.d/userlimit
 echo "0 0 * * * root /usr/bin/reboot" > /etc/cron.d/reboot
@@ -249,7 +233,7 @@ service cron restart
 service nginx start
 service php-fpm start
 service vnstat restart
-#service openvpn restart
+service openvpn restart
 service snmpd restart
 service ssh restart
 service dropbear restart
@@ -269,7 +253,7 @@ echo "-------"  | tee -a log-install.txt
 echo "OpenSSH  : 22, 143"  | tee -a log-install.txt
 echo "Dropbear : 443, 110, 109"  | tee -a log-install.txt
 echo "Squid3    : 80, 8080 (limit to IP SSH)"  | tee -a log-install.txt
-#echo "OpenVPN  : TCP 1194 (client config : http://$MYIP:81/client.ovpn)"  | tee -a log-install.txt
+echo "OpenVPN  : TCP 1194 (client config : http://$MYIP:81/client.ovpn)"  | tee -a log-install.txt
 echo "badvpn   : badvpn-udpgw port 7300"  | tee -a log-install.txt
 #echo "PPTP VPN  : Create User via Putty (echo "username pptpd password *" >> /etc/ppp/chap-secrets)"  | tee -a log-install.txt
 echo "nginx    : 81"  | tee -a log-install.txt
