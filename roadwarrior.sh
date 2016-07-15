@@ -9,7 +9,7 @@
 # START_VARIABLE_SECTION
 # This section contains setup and variables
 ###############################################################################################################
-
+#
 TCP_SERVICE_AND_CONFIG_NAME="openvpn_tcp"
 UDP_SERVICE_AND_CONFIG_NAME="openvpn_udp"
 
